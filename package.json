@@ -1,0 +1,30 @@
+{
+  "name": "sususu-shi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf dist.zip",
+    "build": "npm-run-all clean build:*",
+    "build:dist": "mkdir dist",
+    "build:compile": "tsc",
+    "build:compress_js": "cd dist && zip ../dist.zip index.js",
+    "build:compress_node_modules": "zip -r dist.zip node_modules",
+    "build:lambda": "aws lambda update-function-code --function-name events-example --zip-file fileb://dist.zip",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "typescript",
+    "javascript",
+    "slack",
+    "bot"
+  ],
+  "author": "tada",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^7.0.29",
+    "npm-run-all": "^4.0.2"
+  }
+}
