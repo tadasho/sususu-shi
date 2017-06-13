@@ -1,4 +1,7 @@
 # sususu-shi
+
+ゴリラゴリラゴリラ
+
 ```
 $ git clone https://github.com/tadasho/sususu-shi.git
 $ cd sususu-shi/
