@@ -54,9 +54,10 @@ function assignToIssue(event: any, callback: any) {
             owner: GITHUB_TEAM,
             repo: found[3],
             number: found[4],
-            assignees: found[1] //現段階ではslack側でgithubの@アカウント名とする必要がある。のちに設定が必要
+            assignees: found[1], //現段階ではslack側でgithubの@アカウント名とする必要がある。のちに設定が必要
+            reviewers: [found[1]]
         }
-        var text: string = "Assigned " + found[1] + " to " + GITHUB_TEAM + "/" + found[3] + " issue #" + found[4];
+        var text: string = "Assigned " + found[1] + " to " + GITHUB_TEAM + "/" + found[3] + " issue#" + found[4];
         var message: any = { 
             token: ACCESS_TOKEN,
             channel: event.channel,
@@ -76,14 +77,54 @@ function assignToIssue(event: any, callback: any) {
     callback(null);
 }
 
+// Hear @XXX review YYY#ZZZ and create review request
+function createReviewPullRequest(event: any, callback: any) {
+    var re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*review\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
+    if (!event.bot_id && re.test(event.text)) {
+        var str: string = event.text;
+        var found: string[] = str.match(re);
+        /*
+        @ossan review rally-app#1234
+        found[1] -> ossan
+        found[3] -> rally-app
+        found[4] -> 1234
+        */
+        var tadasan: any = {
+            owner: GITHUB_TEAM,
+            repo: found[3],
+            number: found[4],
+            assignees: found[1], //現段階ではslack側でgithubの@アカウント名とする必要がある。のちに設定が必要
+            reviewers: [found[1]]
+        }
+        var text: string = "Created ReviewRequest " + GITHUB_TEAM + "/" + found[3] + " PullRequest#" + found[4] + " to " + found[1];
+        var message: any = { 
+            token: ACCESS_TOKEN,
+            channel: event.channel,
+            text: text
+        };
+
+        var query: string = qs.stringify(message); // prepare the querystring
+        https.get(`https://slack.com/api/chat.postMessage?${query}`);
+
+        github.authenticate({
+            type: "basic",
+            username: found[1], //のちにslackとgithubの紐付けが必要
+            password: GITHUB_PASS
+        });
+        github.pullRequests.createReviewRequest(tadasan);
+    }
+    callback(null);
+}
+
 
 // Lambda handler
 function handler(data:any, context: any, callback: any) {
     switch (data.type) {
         case "url_verification": verify(data, callback); break;
         case "event_callback":
-            slackProcess(data.event, callback);
-            assignToIssue(data.event, callback); 
+            //slackProcess(data.event, callback);
+            assignToIssue(data.event, callback);
+            createReviewPullRequest(data.event, callback);
             break;
         default: callback(null);
     }

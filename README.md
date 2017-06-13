@@ -5,6 +5,10 @@ $ cd sususu-shi/
 $ npm install
 ```
 
+```
+$ npm run build
+```
+
 環境変数
 
 NODE_SLACK_ACCESS
