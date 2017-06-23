@@ -1,4 +1,4 @@
-import { handler, assignToIssue, createReviewPullRequest } from "../src"
+import { handler, slackProcess, assignToIssue, createReviewPullRequest } from "../src"
 import * as mocha from 'mocha';
 
 var assert = require('assert');
@@ -13,6 +13,24 @@ describe('handler', function () {
                 "bot_id": false
             }
         }, null, function (error) {
+            assert(error === null);
+        });
+    });
+});
+
+// test function slackProcess
+describe('slackProcess', function() {
+    it('slackProcess', function() {
+        assert(slackProcess);
+    });
+    it('関数である', function() {
+        assert(typeof slackProcess === 'function');
+    });
+    it('nullコールバック', function () {
+        slackProcess({
+            "text": "aws lambda",
+            "bot_id": false
+        }, function (error) {
             assert(error === null);
         });
     });
