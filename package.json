@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf dist && rm -rf dist.zip",
+    "clean": "rm -rf dist.zip",
     "build": "npm-run-all clean build:*",
-    "build:dist": "mkdir dist",
     "build:compile": "tsc",
-    "build:compress_js": "cd dist && zip ../dist.zip index.js",
+    "build:compress_js": "zip -j dist.zip src/index.js",
     "build:compress_node_modules": "zip -r dist.zip node_modules",
+    "build:compress_users_json": "zip dist.zip users.json",
     "build:lambda": "aws lambda update-function-code --function-name events-example --zip-file fileb://dist.zip",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc && mocha"
   },
   "keywords": [
     "aws",

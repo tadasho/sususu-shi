@@ -1,3 +1,7 @@
 node_modules/
-dist.zip
 dist/
+users.json
+index.js
+index_test.js
+dist.zip
+

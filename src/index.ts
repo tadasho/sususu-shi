@@ -1,5 +1,5 @@
 /*
-@XXX review YYY#ZZZ and assign
+@XXX review YYY#ZZZ
 
 https://api.slack.com/tutorials/events-api-using-aws-lambda
 */
@@ -8,11 +8,15 @@ const https: any = require('https'),
       qs: any = require('querystring'),
       VERIFICATION_TOKEN = process.env.NODE_SLACK_VERIFICATION,
       ACCESS_TOKEN = process.env.NODE_SLACK_ACCESS,
+      GITHUB_USERNAME = process.env.NODE_GITHUB_USERNAME,
       GITHUB_PASS = process.env.NODE_GITHUB_PASS,
       GITHUB_TEAM = process.env.NODE_GITHUB_TEAM;
 
 var GitHubApi: any = require("github");
 var github = new GitHubApi();
+
+var fs: any = require('fs');
+var users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 
 // Verify Url - https://api.slack.com/events/url_verification
 function verify(data: any, callback: any) {
@@ -24,7 +28,7 @@ function verify(data: any, callback: any) {
 function slackProcess(event: any, callback: any) {
     // test the message for a match and not a bot
     if (!event.bot_id && /(aws|lambda)/ig.test(event.text)) {
-        var text: string = `<@${event.user}> isn't AWS Lambda awesome?`;
+        var text: string = `<@${event.user}> isn't AWS Lambda awesome?` ;
         var message: any = { 
             token: ACCESS_TOKEN,
             channel: event.channel,
@@ -38,24 +42,32 @@ function slackProcess(event: any, callback: any) {
     callback(null);
 }
 
-// Hear @XXX review YYY#ZZZ and assign
+// Hear @XXX review YYY#ZZZ and assign to issue
 function assignToIssue(event: any, callback: any) {
-    var re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*review\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
+    var re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*assign\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
     if (!event.bot_id && re.test(event.text)) {
         var str: string = event.text;
         var found: string[] = str.match(re);
         /*
-        @ossan review rally-app#1234
-        found[1] -> ossan
-        found[3] -> rally-app
+        @userName review yourRepositoryName#1234
+        found[1] -> @userName
+        found[3] -> yourRepositoryName
         found[4] -> 1234
         */
-        var tadasan: any = {
+        /*
+        if (found[1] === '@tada') {
+           var text1: string = 'success'; 
+        } else {
+            var text1: string = 'failed' + encodeURIComponent(found[1]);
+            console.log(found[1]);
+        }
+        console.log("hello");
+        */
+        var assignedUser: any = {
             owner: GITHUB_TEAM,
             repo: found[3],
             number: found[4],
-            assignees: found[1], //現段階ではslack側でgithubの@アカウント名とする必要がある。のちに設定が必要
-            reviewers: [found[1]]
+            assignees: found[1],
         }
         var text: string = "Assigned " + found[1] + " to " + GITHUB_TEAM + "/" + found[3] + " issue#" + found[4];
         var message: any = { 
@@ -69,10 +81,10 @@ function assignToIssue(event: any, callback: any) {
 
         github.authenticate({
             type: "basic",
-            username: found[1], //のちにslackとgithubの紐付けが必要
+            username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
             password: GITHUB_PASS
         });
-        github.issues.addAssigneesToIssue(tadasan);
+        github.issues.addAssigneesToIssue(assignedUser);
     }
     callback(null);
 }
@@ -108,7 +120,7 @@ function createReviewPullRequest(event: any, callback: any) {
 
         github.authenticate({
             type: "basic",
-            username: found[1], //のちにslackとgithubの紐付けが必要
+            username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
             password: GITHUB_PASS
         });
         github.pullRequests.createReviewRequest(tadasan);
@@ -122,11 +134,11 @@ function handler(data:any, context: any, callback: any) {
     switch (data.type) {
         case "url_verification": verify(data, callback); break;
         case "event_callback":
-            //slackProcess(data.event, callback);
+            slackProcess(data.event, callback);
             assignToIssue(data.event, callback);
             createReviewPullRequest(data.event, callback);
             break;
         default: callback(null);
     }
 };
-export { handler };
+export { handler, assignToIssue };
