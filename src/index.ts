@@ -1,3 +1,5 @@
+import { slackProcess } from './slack-process';
+
 /*
 @XXX assign YYY#ZZZ
 @XXX review YYY#ZZZ
@@ -24,7 +26,7 @@ function verify(data: any, callback: any) {
     if (data.token === VERIFICATION_TOKEN) callback(null, data.challenge);
     else callback("verification failed");   
 }
-
+/*
 // Post message to Slack - https://api.slack.com/methods/chat.postMessage
 function slackProcess(event: any, callback: any) {
     // test the message for a match and not a bot
@@ -42,6 +44,7 @@ function slackProcess(event: any, callback: any) {
 
     callback(null);
 }
+*/
 
 // Hear @XXX review YYY#ZZZ and assign to issue
 function assignToIssue(event: any, callback: any) {
