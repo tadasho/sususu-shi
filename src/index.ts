@@ -50,8 +50,8 @@ function assignToIssue(event: any, callback: any) {
         var str: string = event.text;
         var found: string[] = str.match(re);
         /*
-        @userName review yourRepositoryName#1234
-        found[1] -> @userName
+        @userName assign yourRepositoryName#1234
+        found[1] -> userName
         found[3] -> yourRepositoryName
         found[4] -> 1234
         */
@@ -64,7 +64,7 @@ function assignToIssue(event: any, callback: any) {
         }
         console.log("hello");
         */
-        var assignedUser: any = {
+        var assignee: any = {
             owner: GITHUB_TEAM,
             repo: found[3],
             number: found[4],
@@ -85,7 +85,7 @@ function assignToIssue(event: any, callback: any) {
             username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
             password: GITHUB_PASS
         });
-        github.issues.addAssigneesToIssue(assignedUser);
+        github.issues.addAssigneesToIssue(assignee);
     }
     callback(null);
 }
@@ -97,12 +97,12 @@ function createReviewPullRequest(event: any, callback: any) {
         var str: string = event.text;
         var found: string[] = str.match(re);
         /*
-        @ossan review rally-app#1234
-        found[1] -> ossan
-        found[3] -> rally-app
+        @userName review yourRepositoryName#1234
+        found[1] -> userName
+        found[3] -> yourRepositoryName
         found[4] -> 1234
         */
-        var tadasan: any = {
+        var reviewer: any = {
             owner: GITHUB_TEAM,
             repo: found[3],
             number: found[4],
@@ -124,7 +124,7 @@ function createReviewPullRequest(event: any, callback: any) {
             username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
             password: GITHUB_PASS
         });
-        github.pullRequests.createReviewRequest(tadasan);
+        github.pullRequests.createReviewRequest(reviewer);
     }
     callback(null);
 }
@@ -142,4 +142,4 @@ function handler(data:any, context: any, callback: any) {
         default: callback(null);
     }
 };
-export { handler, assignToIssue, createReviewPullRequest };
+export { handler, slackProcess, assignToIssue, createReviewPullRequest };
