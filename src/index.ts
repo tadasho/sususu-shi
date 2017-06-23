@@ -1,4 +1,5 @@
 /*
+@XXX assign YYY#ZZZ
 @XXX review YYY#ZZZ
 
 https://api.slack.com/tutorials/events-api-using-aws-lambda
@@ -141,4 +142,4 @@ function handler(data:any, context: any, callback: any) {
         default: callback(null);
     }
 };
-export { handler, assignToIssue };
+export { handler, assignToIssue, createReviewPullRequest };

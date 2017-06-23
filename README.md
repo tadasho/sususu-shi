@@ -1,12 +1,16 @@
 # sususu-shi
 ```
-$ git clone https://github.com/tadasho/sususu-shi.git
-$ cd sususu-shi/
-$ npm install
+% git clone https://github.com/tadasho/sususu-shi.git
+% cd sususu-shi/
+% npm install
 ```
 
 ```
-$ npm run build
+% npm run build
+```
+
+```
+% NODE_GITHUB_TEAM='XXX' NODE_GITHUB_PASS='YYY' NODE_GITHUB_USERNAME='ZZZ' npm test           
 ```
 
 環境変数

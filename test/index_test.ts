@@ -1,37 +1,55 @@
-import { handler, assignToIssue } from "../src";
-import * as assert from "assert";
+import { handler, assignToIssue, createReviewPullRequest } from "../src"
+import * as mocha from 'mocha';
+
+var assert = require('assert');
 
 // test function handler
-function test1() {
-    handler({
-        "type": "event_callback",
-        "event": {
-            "text": "tada assign sususu-shi#1",
-            "bot_id": false
-        }
-    }, null, function (error) {
-        assert(error === null);
+describe('handler', function () {
+    it('nullコールバック', function () {
+        handler({
+            "type": "event_callback",
+            "event": {
+                "text": "tada assign sususu-shi#1",
+                "bot_id": false
+            }
+        }, null, function (error) {
+            assert(error === null);
+        });
     });
-}
+});
 
-function test2() {
-    var num = 2;
-    assert(num === 2);
-}
-test2();
+// test function assignToIssue
+describe('assignToIssue', function () {
+    it('assignToIssue', function () {
+        assert(assignToIssue);
+    });
+    it('関数である', function () {
+        assert(typeof assignToIssue === "function");
+    });
+    it('nullコールバック', function () {
+        assignToIssue({
+            "text": "@tada assign sususu-shi#1",
+            "bot_id": false
+        }, function (error) {
+            assert(error === null);
+        });
+    });
+});
 
-// test function assignToIssue 
-function test3() {
-    assert(assignToIssue);
-    assert(typeof assignToIssue === "function");
-    assignToIssue({"text": "tada assign sususu-shi#1",
-            "bot_id": false}, function (error) {
-        assert(error === null);
-    })
-}
-test3();
-
-// test function createReviewPullRequest
-function test4() {
-
-}
+// test function createReviewRequest
+describe('createReviewPullRequest', function () {
+    it('createReviewPullRequest', function () {
+        assert(createReviewPullRequest);
+    });
+    it('関数である', function () {
+        assert(typeof createReviewPullRequest === 'function');
+    });
+    it('nullコールバック', function() {
+        createReviewPullRequest({
+            "text": "@tada review sususu-shi#1",
+            "bot_id": false
+        }, function(error) {
+            assert(error === null);
+        });
+    });
+});
