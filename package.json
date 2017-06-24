@@ -29,5 +29,8 @@
     "mocha": "^3.4.2",
     "npm-run-all": "^4.0.2",
     "typescript": "^2.3.4"
+  },
+  "dependencies": {
+    "github": "^9.2.0"
   }
 }
