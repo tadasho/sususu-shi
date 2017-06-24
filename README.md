@@ -6,11 +6,11 @@
 ```
 
 ```
-% npm run build && npm run deploy                                                                   
+% npm run build && npm run deploy
 ```
 
 ```
-% NODE_GITHUB_TEAM='XXX' NODE_GITHUB_PASS='YYY' NODE_GITHUB_USERNAME='ZZZ' npm test           
+% NODE_GITHUB_TEAM='XXX' NODE_GITHUB_PASS='YYY' NODE_GITHUB_USERNAME='ZZZ' npm run build && npm test
 ```
 
 環境変数
