@@ -1,7 +1,7 @@
-import { handler, slackProcess, assignToIssue, createReviewPullRequest } from "../src"
+import * as assert from 'assert';
 import * as mocha from 'mocha';
 
-var assert = require('assert');
+import { handler, slackProcess, assignToIssue, createReviewPullRequest } from '../src';
 
 // test function handler
 describe('handler', function () {
