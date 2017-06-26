@@ -1,6 +1,5 @@
 node_modules/
 dist/
 users.json
-index.js
-index_test.js
 dist.zip
+*.js
