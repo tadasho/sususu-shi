@@ -1,5 +1,6 @@
 *.log
 .tmp/
 dist.zip
+*.js
 node_modules/
 users.json
