@@ -5,6 +5,7 @@ import * as qs from 'querystring';
 
 import { slackProcess } from './slack-process';
 import { assignToIssue } from './assign-to-issue';
+import { createReviewPullRequest } from './create-review-pull-request'
 
 /*
 @XXX assign YYY#ZZZ
@@ -28,81 +29,6 @@ function verify(data: any, callback: any) {
     if (data.token === VERIFICATION_TOKEN) callback(null, data.challenge);
     else callback("verification failed");
 }
-
-/*
-// Hear @XXX review YYY#ZZZ and assign to issue
-function assignToIssue(event: any, callback: any) {
-    var re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*assign\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
-    if (!event.bot_id && re.test(event.text)) {
-        var str: string = event.text;
-        var found: string[] = str.match(re);
-
-        var assignee: any = {
-            owner: GITHUB_TEAM,
-            repo: found[3],
-            number: found[4],
-            assignees: found[1],
-        }
-        var text: string = "Assigned " + found[1] + " to " + GITHUB_TEAM + "/" + found[3] + " issue#" + found[4];
-        var message: any = {
-            token: ACCESS_TOKEN,
-            channel: event.channel,
-            text: text
-        };
-
-        var query: string = qs.stringify(message); // prepare the querystring
-        https.get(`https://slack.com/api/chat.postMessage?${query}`);
-
-        github.authenticate({
-            type: "basic",
-            username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
-            password: GITHUB_PASS
-        });
-        github.issues.addAssigneesToIssue(assignee);
-    }
-    callback(null);
-}
-*/
-
-// Hear @XXX review YYY#ZZZ and create review request
-function createReviewPullRequest(event: any, callback: any) {
-    var re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*review\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
-    if (!event.bot_id && re.test(event.text)) {
-        var str: string = event.text;
-        var found: string[] = str.match(re);
-        /*
-        @userName review yourRepositoryName#1234
-        found[1] -> userName
-        found[3] -> yourRepositoryName
-        found[4] -> 1234
-        */
-        var reviewer: any = {
-            owner: GITHUB_TEAM,
-            repo: found[3],
-            number: found[4],
-            assignees: found[1], //現段階ではslack側でgithubの@アカウント名とする必要がある。のちに設定が必要
-            reviewers: [found[1]]
-        }
-        var text: string = "Created ReviewRequest " + GITHUB_TEAM + "/" + found[3] + " PullRequest#" + found[4] + " to " + found[1];
-        var message: any = {
-            token: ACCESS_TOKEN,
-            channel: event.channel,
-            text: text
-        };
-
-        var query: string = qs.stringify(message); // prepare the querystring
-        https.get(`https://slack.com/api/chat.postMessage?${query}`);
-
-        github.authenticate({
-            type: "basic",
-            username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
-            password: GITHUB_PASS
-        });
-        github.pullRequests.createReviewRequest(reviewer);
-    }
-    callback(null);
-}
-
 
 // Lambda handler
 function handler(data:any, context: any, callback: any) {

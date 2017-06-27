@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf dist.zip",
-    "build": "npm-run-all clean build:*",
+    "build": "npm-run-all build:*",
     "build:compile": "tsc",
     "build:compress_js": "zip -j dist.zip .tmp/src/*",
     "build:compress_node_modules": "zip -r dist.zip node_modules",
@@ -14,7 +14,8 @@
     "test": "mocha .tmp/test",
     "watch": "npm-run-all -p \"watch:*\"",
     "watch:build": "tsc --watch",
-    "watch:test": "watch \"npm run test\" \"src\" \"test\""
+    "watch:test": "watch \"npm run test\" \"src\" \"test\"",
+    "prepublish": "npm-run-all -s clean build"
   },
   "keywords": [
     "aws",
