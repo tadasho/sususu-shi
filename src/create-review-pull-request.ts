@@ -28,7 +28,7 @@ function createReviewPullRequest(event: any, callback: any) {
             assignees: found[1], //現段階ではslack側でgithubの@アカウント名とする必要がある。のちに設定が必要
             reviewers: found[1]
         };
-        const text: string = "Created ReviewRequest " + GITHUB_TEAM + "/" + found[3] + " PullRequest#" + found[4] + " to " + found[1];
+        const text: string = 'Created ReviewRequest ' + GITHUB_TEAM + '/' + found[3] + ' PullRequest#' + found[4] + ' to ' + found[1];
         const message: any = {
             token: ACCESS_TOKEN,
             channel: event.channel,
@@ -39,7 +39,7 @@ function createReviewPullRequest(event: any, callback: any) {
         https.get(`https://slack.com/api/chat.postMessage?${query}`);
 
         github.authenticate({
-            type: "basic",
+            type: 'basic',
             username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
             password: GITHUB_PASS
         });

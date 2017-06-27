@@ -27,7 +27,7 @@ function assignToIssue(event: any, callback: any) {
             number: found[4],
             assignees: found[1]
         };
-        const text: string = "Assigned " + found[1] + " to " + GITHUB_TEAM + "/" + found[3] + " issue#" + found[4];
+        const text: string = 'Assigned ' + found[1] + ' to ' + GITHUB_TEAM + '/' + found[3] + ' issue#' + found[4];
         const message: any = {
             token: ACCESS_TOKEN,
             channel: event.channel,
@@ -38,7 +38,7 @@ function assignToIssue(event: any, callback: any) {
         https.get(`https://slack.com/api/chat.postMessage?${query}`);
 
         github.authenticate({
-            type: "basic",
+            type: 'basic',
             username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
             password: GITHUB_PASS
         });

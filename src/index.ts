@@ -27,14 +27,14 @@ const users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 // Verify Url - https://api.slack.com/events/url_verification
 function verify(data: any, callback: any) {
     if (data.token === VERIFICATION_TOKEN) callback(null, data.challenge);
-    else callback("verification failed");
+    else callback('verification failed');
 }
 
 // Lambda handler
 function handler(data:any, context: any, callback: any) {
     switch (data.type) {
-        case "url_verification": verify(data, callback); break;
-        case "event_callback":
+        case 'url_verification': verify(data, callback); break;
+        case 'event_callback':
             slackProcess(data.event, callback);
             assignToIssue(data.event, callback);
             createReviewPullRequest(data.event, callback);

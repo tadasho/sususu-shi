@@ -7,10 +7,10 @@ import { handler, slackProcess, assignToIssue, createReviewPullRequest } from '.
 describe('handler', function () {
     it('nullコールバック', function () {
         handler({
-            "type": "event_callback",
-            "event": {
-                "text": "tada assign sususu-shi#1",
-                "bot_id": false
+            type: 'event_callback',
+            event: {
+                text: 'tada assign sususu-shi#1',
+                bot_id: false
             }
         }, null, function (error) {
             assert(error === null);
@@ -28,8 +28,8 @@ describe('slackProcess', function() {
     });
     it('nullコールバック', function () {
         slackProcess({
-            "text": "aws lambda",
-            "bot_id": false
+            text: 'aws lambda',
+            bot_id: false
         }, function (error) {
             assert(error === null);
         });
@@ -42,12 +42,12 @@ describe('assignToIssue', function () {
         assert(assignToIssue);
     });
     it('関数である', function () {
-        assert(typeof assignToIssue === "function");
+        assert(typeof assignToIssue === 'function');
     });
     it('nullコールバック', function () {
         assignToIssue({
-            "text": "@tada assign sususu-shi#1",
-            "bot_id": false
+            text: '@tada assign sususu-shi#1',
+            bot_id: false
         }, function (error) {
             assert(error === null);
         });
@@ -64,8 +64,8 @@ describe('createReviewPullRequest', function () {
     });
     it('nullコールバック', function() {
         createReviewPullRequest({
-            "text": "@tada review sususu-shi#1",
-            "bot_id": false
+            text: '@tada review sususu-shi#1',
+            bot_id: false
         }, function(error) {
             assert(error === null);
         });
