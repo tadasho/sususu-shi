@@ -30,7 +30,7 @@ const assignToIssue = (event: any, callback: any) => {
         const text: string = 'Assigned ' + found[1] + ' to ' + GITHUB_TEAM + '/' + found[3] + ' issue#' + found[4];
         const message: any = {
             channel: event.channel,
-            text: text,
+            text,
             token: ACCESS_TOKEN
         };
 

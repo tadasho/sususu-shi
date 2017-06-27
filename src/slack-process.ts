@@ -10,7 +10,7 @@ const slackProcess = (event: any, callback: any) => {
         const text: string = `<@${event.user}> isn't AWS Lambda awesome?`;
         const message: any = {
             channel: event.channel,
-            text: text,
+            text,
             token: ACCESS_TOKEN
         };
 

@@ -31,7 +31,7 @@ const createReviewPullRequest = (event: any, callback: any) => {
         const text: string = 'Created ReviewRequest ' + GITHUB_TEAM + '/' + found[3] + ' PullRequest#' + found[4] + ' to ' + found[1];
         const message: any = {
             channel: event.channel,
-            text: text,
+            text,
             token: ACCESS_TOKEN
         };
 
