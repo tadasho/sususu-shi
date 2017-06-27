@@ -4,18 +4,12 @@ import * as mocha from 'mocha';
 import { slackProcess } from '../src/slack-process';
 
 describe('slackProcess', () => {
-  it('slackProcess', () => {
-    assert(slackProcess);
-  });
-  it('関数である', () => {
-    assert(typeof slackProcess === 'function');
-  });
-  it('nullコールバック', () => {
-    slackProcess({
+  it('should return Promise', () => {
+    return slackProcess({
       bot_id: false,
       text: 'aws lambda'
-    }, (error) => {
-      assert(error === null);
+    }).then((value) => {
+      assert(value === null);
     });
   });
 });

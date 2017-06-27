@@ -4,18 +4,12 @@ import * as mocha from 'mocha';
 import { createReviewPullRequest } from '../src';
 
 describe('createReviewPullRequest', () => {
-  it('createReviewPullRequest', () => {
-    assert(createReviewPullRequest);
-  });
-  it('関数である', () => {
-    assert(typeof createReviewPullRequest === 'function');
-  });
-  it('nullコールバック', () => {
-    createReviewPullRequest({
+  it('should return Promise', () => {
+    return createReviewPullRequest({
       bot_id: false,
       text: '@tada review sususu-shi#1'
-    }, (error) => {
-      assert(error === null);
+    }).then((value) => {
+      assert(value === null);
     });
   });
 });

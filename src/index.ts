@@ -41,9 +41,25 @@ const handler = (data: any, context: any, callback: any) => {
         .catch((error) => callback(error));
       break;
     case 'event_callback':
-      slackProcess(data.event, callback);
-      assignToIssue(data.event, callback);
-      createReviewPullRequest(data.event, callback);
+      // FIXME: wrong promise chain.
+      Promise.resolve(null)
+        .then((value) => {
+          return value === null
+            ? slackProcess(data.event)
+            : value;
+        })
+        .then((value) => {
+          return value === null
+            ? assignToIssue(data.event)
+            : value;
+        })
+        .then((value) => {
+          return value === null
+            ? createReviewPullRequest(data.event)
+            : value;
+        })
+        .then((value) => callback(null, value))
+        .catch((error) => callback(error));
       break;
     default: callback(null);
   }

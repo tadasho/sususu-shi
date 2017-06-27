@@ -10,7 +10,7 @@ const GITHUB_PASS = process.env.NODE_GITHUB_PASS;
 const GITHUB_TEAM = process.env.NODE_GITHUB_TEAM;
 
 // Hear @XXX review YYY#ZZZ and create review request
-const createReviewPullRequest = (event: any, callback: any) => {
+const createReviewPullRequest = (event: any): Promise<any> => {
   const re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*review\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
   if (!event.bot_id && re.test(event.text)) {
     const str: string = event.text;
@@ -47,7 +47,7 @@ const createReviewPullRequest = (event: any, callback: any) => {
     });
     github.pullRequests.createReviewRequest(reviewer);
   }
-  callback(null);
+  return Promise.resolve(null);
 };
 
 export { createReviewPullRequest };
