@@ -20,9 +20,9 @@ const GITHUB_USERNAME = process.env.NODE_GITHUB_USERNAME;
 const GITHUB_PASS = process.env.NODE_GITHUB_PASS;
 const GITHUB_TEAM = process.env.NODE_GITHUB_TEAM;
 
-var github = new GitHubApi();
+const github = new GitHubApi();
 
-var users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+const users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 
 // Verify Url - https://api.slack.com/events/url_verification
 function verify(data: any, callback: any) {
