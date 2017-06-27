@@ -25,7 +25,7 @@ const createReviewPullRequest = (event: any, callback: any) => {
             owner: GITHUB_TEAM,
             repo: found[3],
             number: found[4],
-            assignees: found[1], //現段階ではslack側でgithubの@アカウント名とする必要がある。のちに設定が必要
+            assignees: found[1], // 現段階ではslack側でgithubの@アカウント名とする必要がある。のちに設定が必要
             reviewers: found[1]
         };
         const text: string = 'Created ReviewRequest ' + GITHUB_TEAM + '/' + found[3] + ' PullRequest#' + found[4] + ' to ' + found[1];
@@ -40,7 +40,7 @@ const createReviewPullRequest = (event: any, callback: any) => {
 
         github.authenticate({
             type: 'basic',
-            username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
+            username: GITHUB_USERNAME, // のちにslackとgithubの紐付けが必要
             password: GITHUB_PASS
         });
         github.pullRequests.createReviewRequest(reviewer);

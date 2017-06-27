@@ -39,7 +39,7 @@ const assignToIssue = (event: any, callback: any) => {
 
         github.authenticate({
             type: 'basic',
-            username: GITHUB_USERNAME, //のちにslackとgithubの紐付けが必要
+            username: GITHUB_USERNAME, // のちにslackとgithubの紐付けが必要
             password: GITHUB_PASS
         });
         github.issues.addAssigneesToIssue(assignee);
