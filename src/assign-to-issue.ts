@@ -25,7 +25,7 @@ function assignToIssue(event: any, callback: any) {
             owner: GITHUB_TEAM,
             repo: found[3],
             number: found[4],
-            assignees: found[1],
+            assignees: found[1]
         };
         const text: string = "Assigned " + found[1] + " to " + GITHUB_TEAM + "/" + found[3] + " issue#" + found[4];
         const message: any = {
