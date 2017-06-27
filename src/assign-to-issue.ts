@@ -1,5 +1,5 @@
-import * as https from 'https';
 import * as GitHubApi from 'github';
+import * as https from 'https';
 import * as qs from 'querystring';
 
 const github = new GitHubApi();
@@ -22,25 +22,25 @@ const assignToIssue = (event: any, callback: any) => {
         found[4] -> 1234
         */
         const assignee: any = {
-            owner: GITHUB_TEAM,
-            repo: found[3],
+            assignees: found[1],
             number: found[4],
-            assignees: found[1]
+            owner: GITHUB_TEAM,
+            repo: found[3]
         };
         const text: string = 'Assigned ' + found[1] + ' to ' + GITHUB_TEAM + '/' + found[3] + ' issue#' + found[4];
         const message: any = {
-            token: ACCESS_TOKEN,
             channel: event.channel,
-            text: text
+            text: text,
+            token: ACCESS_TOKEN
         };
 
         const query: string = qs.stringify(message); // prepare the querystring
         https.get(`https://slack.com/api/chat.postMessage?${query}`);
 
         github.authenticate({
+            password: GITHUB_PASS,
             type: 'basic',
-            username: GITHUB_USERNAME, // のちにslackとgithubの紐付けが必要
-            password: GITHUB_PASS
+            username: GITHUB_USERNAME // のちにslackとgithubの紐付けが必要
         });
         github.issues.addAssigneesToIssue(assignee);
     }

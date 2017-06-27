@@ -9,9 +9,9 @@ const slackProcess = (event: any, callback: any) => {
     if (!event.bot_id && /(aws|lambda)/ig.test(event.text)) {
         const text: string = `<@${event.user}> isn't AWS Lambda awesome?`;
         const message: any = {
-            token: ACCESS_TOKEN,
             channel: event.channel,
-            text: text
+            text: text,
+            token: ACCESS_TOKEN
         };
 
         const query: string = qs.stringify(message); // prepare the querystring

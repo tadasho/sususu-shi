@@ -1,17 +1,22 @@
 import * as assert from 'assert';
 import * as mocha from 'mocha';
 
-import { handler, slackProcess, assignToIssue, createReviewPullRequest } from '../src';
+import {
+  assignToIssue,
+  createReviewPullRequest,
+  handler,
+  slackProcess
+} from '../src';
 
 // test function handler
 describe('handler', () => {
   it('nullコールバック', () => {
     handler({
-      type: 'event_callback',
       event: {
-        text: 'tada assign sususu-shi#1',
-        bot_id: false
-      }
+        bot_id: false,
+        text: 'tada assign sususu-shi#1'
+      },
+      type: 'event_callback'
     }, null, (error) => {
       assert(error === null);
     });
@@ -28,8 +33,8 @@ describe('slackProcess', () => {
   });
   it('nullコールバック', () => {
     slackProcess({
-      text: 'aws lambda',
-      bot_id: false
+      bot_id: false,
+      text: 'aws lambda'
     }, (error) => {
       assert(error === null);
     });
@@ -46,8 +51,8 @@ describe('assignToIssue', () => {
   });
   it('nullコールバック', () => {
     assignToIssue({
-      text: '@tada assign sususu-shi#1',
-      bot_id: false
+      bot_id: false,
+      text: '@tada assign sususu-shi#1'
     }, (error) => {
       assert(error === null);
     });
@@ -64,8 +69,8 @@ describe('createReviewPullRequest', () => {
   });
   it('nullコールバック', () => {
     createReviewPullRequest({
-      text: '@tada review sususu-shi#1',
-      bot_id: false
+      bot_id: false,
+      text: '@tada review sususu-shi#1'
     }, (error) => {
       assert(error === null);
     });

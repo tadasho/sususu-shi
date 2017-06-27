@@ -3,9 +3,9 @@ import * as GitHubApi from 'github';
 import * as https from 'https';
 import * as qs from 'querystring';
 
-import { slackProcess } from './slack-process';
 import { assignToIssue } from './assign-to-issue';
 import { createReviewPullRequest } from './create-review-pull-request';
+import { slackProcess } from './slack-process';
 
 /*
 @XXX assign YYY#ZZZ
