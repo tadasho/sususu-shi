@@ -4,6 +4,7 @@ import * as https from 'https';
 import * as qs from 'querystring';
 
 import { slackProcess } from './slack-process';
+import { assignToIssue } from './assign-to-issue';
 
 /*
 @XXX assign YYY#ZZZ
@@ -27,47 +28,15 @@ function verify(data: any, callback: any) {
     if (data.token === VERIFICATION_TOKEN) callback(null, data.challenge);
     else callback("verification failed");
 }
+
 /*
-// Post message to Slack - https://api.slack.com/methods/chat.postMessage
-function slackProcess(event: any, callback: any) {
-    // test the message for a match and not a bot
-    if (!event.bot_id && /(aws|lambda)/ig.test(event.text)) {
-        var text: string = `<@${event.user}> isn't AWS Lambda awesome?` ;
-        var message: any = {
-            token: ACCESS_TOKEN,
-            channel: event.channel,
-            text: text
-        };
-
-        var query: string = qs.stringify(message); // prepare the querystring
-        https.get(`https://slack.com/api/chat.postMessage?${query}`);
-    }
-
-    callback(null);
-}
-*/
-
 // Hear @XXX review YYY#ZZZ and assign to issue
 function assignToIssue(event: any, callback: any) {
     var re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*assign\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
     if (!event.bot_id && re.test(event.text)) {
         var str: string = event.text;
         var found: string[] = str.match(re);
-        /*
-        @userName assign yourRepositoryName#1234
-        found[1] -> userName
-        found[3] -> yourRepositoryName
-        found[4] -> 1234
-        */
-        /*
-        if (found[1] === '@tada') {
-           var text1: string = 'success';
-        } else {
-            var text1: string = 'failed' + encodeURIComponent(found[1]);
-            console.log(found[1]);
-        }
-        console.log("hello");
-        */
+
         var assignee: any = {
             owner: GITHUB_TEAM,
             repo: found[3],
@@ -93,6 +62,7 @@ function assignToIssue(event: any, callback: any) {
     }
     callback(null);
 }
+*/
 
 // Hear @XXX review YYY#ZZZ and create review request
 function createReviewPullRequest(event: any, callback: any) {

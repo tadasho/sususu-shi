@@ -7,7 +7,7 @@ const ACCESS_TOKEN = process.env.NODE_SLACK_ACCESS;
 function slackProcess(event: any, callback: any) {
     // test the message for a match and not a bot
     if (!event.bot_id && /(aws|lambda)/ig.test(event.text)) {
-        var text: string = `<@${event.user}> isn't AWS Lambda awesome gorilla?` ;
+        var text: string = `<@${event.user}> isn't AWS Lambda awesome?` ;
         var message: any = {
             token: ACCESS_TOKEN,
             channel: event.channel,
