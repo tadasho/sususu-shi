@@ -7,7 +7,7 @@
     "clean": "rm -rf dist.zip",
     "build": "npm-run-all clean build:*",
     "build:compile": "tsc",
-    "build:compress_js": "zip -j dist.zip src/*",
+    "build:compress_js": "zip -j dist.zip .tmp/src/*",
     "build:compress_node_modules": "zip -r dist.zip node_modules",
     "build:compress_users_json": "zip dist.zip users.json",
     "deploy": "aws lambda update-function-code --function-name events-example --zip-file fileb://dist.zip",

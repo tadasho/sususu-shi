@@ -1,5 +1,4 @@
-node_modules/
-dist/
-users.json
+.tmp/
 dist.zip
-*.js
+node_modules/
+users.json
