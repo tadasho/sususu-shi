@@ -5,7 +5,7 @@ import * as qs from 'querystring';
 
 import { slackProcess } from './slack-process';
 import { assignToIssue } from './assign-to-issue';
-import { createReviewPullRequest } from './create-review-pull-request'
+import { createReviewPullRequest } from './create-review-pull-request';
 
 /*
 @XXX assign YYY#ZZZ
@@ -41,5 +41,6 @@ function handler(data:any, context: any, callback: any) {
             break;
         default: callback(null);
     }
-};
+}
+
 export { handler, slackProcess, assignToIssue, createReviewPullRequest };
