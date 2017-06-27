@@ -26,24 +26,24 @@ const users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 
 // Verify Url - https://api.slack.com/events/url_verification
 const verify = (data: any, callback: any) => {
-    if (data.token === VERIFICATION_TOKEN) {
-        callback(null, data.challenge);
-    } else {
-        callback('verification failed');
-    }
+  if (data.token === VERIFICATION_TOKEN) {
+    callback(null, data.challenge);
+  } else {
+    callback('verification failed');
+  }
 };
 
 // Lambda handler
 const handler = (data: any, context: any, callback: any) => {
-    switch (data.type) {
-        case 'url_verification': verify(data, callback); break;
-        case 'event_callback':
-            slackProcess(data.event, callback);
-            assignToIssue(data.event, callback);
-            createReviewPullRequest(data.event, callback);
-            break;
-        default: callback(null);
-    }
+  switch (data.type) {
+    case 'url_verification': verify(data, callback); break;
+    case 'event_callback':
+      slackProcess(data.event, callback);
+      assignToIssue(data.event, callback);
+      createReviewPullRequest(data.event, callback);
+      break;
+    default: callback(null);
+  }
 };
 
 export { handler, slackProcess, assignToIssue, createReviewPullRequest };
