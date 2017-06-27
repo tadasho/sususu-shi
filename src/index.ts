@@ -25,13 +25,13 @@ const github = new GitHubApi();
 const users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 
 // Verify Url - https://api.slack.com/events/url_verification
-function verify(data: any, callback: any) {
+const verify = (data: any, callback: any) => {
     if (data.token === VERIFICATION_TOKEN) callback(null, data.challenge);
     else callback('verification failed');
-}
+};
 
 // Lambda handler
-function handler(data:any, context: any, callback: any) {
+const handler = (data: any, context: any, callback: any) => {
     switch (data.type) {
         case 'url_verification': verify(data, callback); break;
         case 'event_callback':
@@ -41,6 +41,6 @@ function handler(data:any, context: any, callback: any) {
             break;
         default: callback(null);
     }
-}
+};
 
 export { handler, slackProcess, assignToIssue, createReviewPullRequest };

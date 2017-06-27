@@ -10,7 +10,7 @@ const GITHUB_PASS = process.env.NODE_GITHUB_PASS;
 const GITHUB_TEAM = process.env.NODE_GITHUB_TEAM;
 
 // Hear @XXX review YYY#ZZZ and assign to issue
-function assignToIssue(event: any, callback: any) {
+const assignToIssue = (event: any, callback: any) => {
     const re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*assign\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
     if (!event.bot_id && re.test(event.text)) {
         const str: string = event.text;
@@ -45,6 +45,6 @@ function assignToIssue(event: any, callback: any) {
         github.issues.addAssigneesToIssue(assignee);
     }
     callback(null);
-}
+};
 
 export { assignToIssue };
