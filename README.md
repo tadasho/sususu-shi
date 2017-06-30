@@ -6,6 +6,8 @@
 % npm install
 ```
 
+rewrite `events-exmple` at line 14 of package.json to your function name.
+
 ```
 % npm run build && npm run deploy
 ```
@@ -13,6 +15,7 @@
 ```
 % NODE_GITHUB_TEAM='XXX' NODE_GITHUB_PASS='YYY' NODE_GITHUB_USERNAME='ZZZ' npm run watch
 ```
+
 
 ## 環境変数
 
