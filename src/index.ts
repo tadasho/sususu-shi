@@ -52,7 +52,7 @@ const handler = (data: any, context: any, callback: any) => {
         })
         .then((value) => {
           return value === null
-            ? createReviewPullRequest(data.event)
+            ? createReviewPullRequest(config, data.event)
             : value;
         })
         .then((value) => callback(null, value))
