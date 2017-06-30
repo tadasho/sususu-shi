@@ -2,15 +2,19 @@ import * as GitHubApi from 'github';
 import * as https from 'https';
 import * as qs from 'querystring';
 
+import { Config } from './config';
+
 const github = new GitHubApi();
 
-const ACCESS_TOKEN = process.env.NODE_SLACK_ACCESS;
-const GITHUB_USERNAME = process.env.NODE_GITHUB_USERNAME;
-const GITHUB_PASS = process.env.NODE_GITHUB_PASS;
-const GITHUB_TEAM = process.env.NODE_GITHUB_TEAM;
-
 // Hear @XXX review YYY#ZZZ and assign to issue
-const assignToIssue = (event: any): Promise<any> => {
+const assignToIssue = (
+  {
+    accessToken,
+    githubPass,
+    githubTeam,
+    githubUsername
+  }: Config,
+  event: any): Promise<any> => {
   const re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*assign\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
   if (!event.bot_id && re.test(event.text)) {
     const str: string = event.text;
@@ -24,23 +28,23 @@ const assignToIssue = (event: any): Promise<any> => {
     const assignee: any = {
       assignees: found[1],
       number: found[4],
-      owner: GITHUB_TEAM,
+      owner: githubTeam,
       repo: found[3]
     };
-    const text: string = 'Assigned ' + found[1] + ' to ' + GITHUB_TEAM + '/' + found[3] + ' issue#' + found[4];
+    const text: string = 'Assigned ' + found[1] + ' to ' + githubTeam + '/' + found[3] + ' issue#' + found[4];
     const message: any = {
       channel: event.channel,
       text,
-      token: ACCESS_TOKEN
+      token: accessToken
     };
 
     const query: string = qs.stringify(message); // prepare the querystring
     https.get(`https://slack.com/api/chat.postMessage?${query}` as any); // FIXME
 
     github.authenticate({
-      password: GITHUB_PASS,
+      password: githubPass,
       type: 'basic',
-      username: GITHUB_USERNAME // のちにslackとgithubの紐付けが必要
+      username: githubUsername // のちにslackとgithubの紐付けが必要
     });
     github.issues.addAssigneesToIssue(assignee);
   }

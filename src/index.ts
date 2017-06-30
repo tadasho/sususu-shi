@@ -47,7 +47,7 @@ const handler = (data: any, context: any, callback: any) => {
         })
         .then((value) => {
           return value === null
-            ? assignToIssue(data.event)
+            ? assignToIssue(config, data.event)
             : value;
         })
         .then((value) => {
