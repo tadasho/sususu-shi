@@ -15,7 +15,7 @@ const slackProcess = (event: any): Promise<any> => {
     };
 
     const query: string = qs.stringify(message); // prepare the querystring
-    https.get(`https://slack.com/api/chat.postMessage?${query}`);
+    https.get(`https://slack.com/api/chat.postMessage?${query}` as any); // FIXME
   }
   return Promise.resolve(null);
 };
