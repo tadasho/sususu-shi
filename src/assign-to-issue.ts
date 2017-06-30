@@ -39,8 +39,15 @@ const assignToIssue = (
       token: accessToken
     };
 
+    console.log('aaa');
     const query: string = qs.stringify(message); // prepare the querystring
-    fetch(`https://slack.com/api/chat.postMessage?${query}`); // FIXME
+    const promise = fetch(`https://slack.com/api/chat.postMessage?${query}`).then((response) => {
+      // console.log(response);
+      return response.json();
+    }).then((obj) => {
+      console.log(obj);
+      return null;
+    });
 
     github.authenticate({
       password: githubPass,
@@ -48,8 +55,12 @@ const assignToIssue = (
       username: githubUsername // のちにslackとgithubの紐付けが必要
     });
     github.issues.addAssigneesToIssue(assignee);
+    return promise;
+    
   }
-  return Promise.resolve(null);
+  else {
+    return Promise.resolve(null);
+  }
 };
 
 export { assignToIssue };
