@@ -10,6 +10,7 @@
     "build:compress_js": "zip -j dist.zip .tmp/src/*",
     "build:compress_node_modules": "zip -r dist.zip node_modules",
     "build:compress_users_json": "zip dist.zip users.json",
+    "build:lint": "tslint -p tsconfig.json",
     "deploy": "aws lambda update-function-code --function-name events-example --zip-file fileb://dist.zip",
     "test": "mocha .tmp/test",
     "watch": "npm-run-all -p \"watch:*\"",
@@ -32,6 +33,7 @@
     "@types/node": "^7.0.29",
     "mocha": "^3.4.2",
     "npm-run-all": "^4.0.2",
+    "tslint": "^5.4.3",
     "typescript": "^2.3.4",
     "watch": "^1.0.2"
   },

@@ -1,73 +1,78 @@
 import * as assert from 'assert';
 import * as mocha from 'mocha';
 
-import { handler, slackProcess, assignToIssue, createReviewPullRequest } from '../src';
+import {
+  assignToIssue,
+  createReviewPullRequest,
+  handler,
+  slackProcess
+} from '../src';
 
 // test function handler
-describe('handler', function () {
-    it('nullコールバック', function () {
-        handler({
-            "type": "event_callback",
-            "event": {
-                "text": "tada assign sususu-shi#1",
-                "bot_id": false
-            }
-        }, null, function (error) {
-            assert(error === null);
-        });
+describe('handler', () => {
+  it('nullコールバック', () => {
+    handler({
+      event: {
+        bot_id: false,
+        text: 'tada assign sususu-shi#1'
+      },
+      type: 'event_callback'
+    }, null, (error) => {
+      assert(error === null);
     });
+  });
 });
 
 // test function slackProcess
-describe('slackProcess', function() {
-    it('slackProcess', function() {
-        assert(slackProcess);
+describe('slackProcess', () => {
+  it('slackProcess', () => {
+    assert(slackProcess);
+  });
+  it('関数である', () => {
+    assert(typeof slackProcess === 'function');
+  });
+  it('nullコールバック', () => {
+    slackProcess({
+      bot_id: false,
+      text: 'aws lambda'
+    }, (error) => {
+      assert(error === null);
     });
-    it('関数である', function() {
-        assert(typeof slackProcess === 'function');
-    });
-    it('nullコールバック', function () {
-        slackProcess({
-            "text": "aws lambda",
-            "bot_id": false
-        }, function (error) {
-            assert(error === null);
-        });
-    });
+  });
 });
 
 // test function assignToIssue
-describe('assignToIssue', function () {
-    it('assignToIssue', function () {
-        assert(assignToIssue);
+describe('assignToIssue', () => {
+  it('assignToIssue', () => {
+    assert(assignToIssue);
+  });
+  it('関数である', () => {
+    assert(typeof assignToIssue === 'function');
+  });
+  it('nullコールバック', () => {
+    assignToIssue({
+      bot_id: false,
+      text: '@tada assign sususu-shi#1'
+    }, (error) => {
+      assert(error === null);
     });
-    it('関数である', function () {
-        assert(typeof assignToIssue === "function");
-    });
-    it('nullコールバック', function () {
-        assignToIssue({
-            "text": "@tada assign sususu-shi#1",
-            "bot_id": false
-        }, function (error) {
-            assert(error === null);
-        });
-    });
+  });
 });
 
 // test function createReviewRequest
-describe('createReviewPullRequest', function () {
-    it('createReviewPullRequest', function () {
-        assert(createReviewPullRequest);
+describe('createReviewPullRequest', () => {
+  it('createReviewPullRequest', () => {
+    assert(createReviewPullRequest);
+  });
+  it('関数である', () => {
+    assert(typeof createReviewPullRequest === 'function');
+  });
+  it('nullコールバック', () => {
+    createReviewPullRequest({
+      bot_id: false,
+      text: '@tada review sususu-shi#1'
+    }, (error) => {
+      assert(error === null);
     });
-    it('関数である', function () {
-        assert(typeof createReviewPullRequest === 'function');
-    });
-    it('nullコールバック', function() {
-        createReviewPullRequest({
-            "text": "@tada review sususu-shi#1",
-            "bot_id": false
-        }, function(error) {
-            assert(error === null);
-        });
-    });
+  });
 });

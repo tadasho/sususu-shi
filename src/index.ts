@@ -3,9 +3,9 @@ import * as GitHubApi from 'github';
 import * as https from 'https';
 import * as qs from 'querystring';
 
-import { slackProcess } from './slack-process';
 import { assignToIssue } from './assign-to-issue';
-import { createReviewPullRequest } from './create-review-pull-request'
+import { createReviewPullRequest } from './create-review-pull-request';
+import { slackProcess } from './slack-process';
 
 /*
 @XXX assign YYY#ZZZ
@@ -20,26 +20,30 @@ const GITHUB_USERNAME = process.env.NODE_GITHUB_USERNAME;
 const GITHUB_PASS = process.env.NODE_GITHUB_PASS;
 const GITHUB_TEAM = process.env.NODE_GITHUB_TEAM;
 
-var github = new GitHubApi();
+const github = new GitHubApi();
 
-var users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+const users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 
 // Verify Url - https://api.slack.com/events/url_verification
-function verify(data: any, callback: any) {
-    if (data.token === VERIFICATION_TOKEN) callback(null, data.challenge);
-    else callback("verification failed");
-}
+const verify = (data: any, callback: any) => {
+  if (data.token === VERIFICATION_TOKEN) {
+    callback(null, data.challenge);
+  } else {
+    callback('verification failed');
+  }
+};
 
 // Lambda handler
-function handler(data:any, context: any, callback: any) {
-    switch (data.type) {
-        case "url_verification": verify(data, callback); break;
-        case "event_callback":
-            slackProcess(data.event, callback);
-            assignToIssue(data.event, callback);
-            createReviewPullRequest(data.event, callback);
-            break;
-        default: callback(null);
-    }
+const handler = (data: any, context: any, callback: any) => {
+  switch (data.type) {
+    case 'url_verification': verify(data, callback); break;
+    case 'event_callback':
+      slackProcess(data.event, callback);
+      assignToIssue(data.event, callback);
+      createReviewPullRequest(data.event, callback);
+      break;
+    default: callback(null);
+  }
 };
+
 export { handler, slackProcess, assignToIssue, createReviewPullRequest };
