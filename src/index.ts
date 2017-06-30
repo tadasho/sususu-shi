@@ -42,7 +42,7 @@ const handler = (data: any, context: any, callback: any) => {
       Promise.resolve(null)
         .then((value) => {
           return value === null
-            ? slackProcess(data.event)
+            ? slackProcess(config, data.event)
             : value;
         })
         .then((value) => {
