@@ -10,7 +10,7 @@ const GITHUB_PASS = process.env.NODE_GITHUB_PASS;
 const GITHUB_TEAM = process.env.NODE_GITHUB_TEAM;
 
 // Hear @XXX review YYY#ZZZ and assign to issue
-const assignToIssue = (event: any, callback: any) => {
+const assignToIssue = (event: any): Promise<any> => {
   const re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*assign\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
   if (!event.bot_id && re.test(event.text)) {
     const str: string = event.text;
@@ -35,7 +35,7 @@ const assignToIssue = (event: any, callback: any) => {
     };
 
     const query: string = qs.stringify(message); // prepare the querystring
-    https.get(`https://slack.com/api/chat.postMessage?${query}`);
+    https.get(`https://slack.com/api/chat.postMessage?${query}` as any); // FIXME
 
     github.authenticate({
       password: GITHUB_PASS,
@@ -44,7 +44,7 @@ const assignToIssue = (event: any, callback: any) => {
     });
     github.issues.addAssigneesToIssue(assignee);
   }
-  callback(null);
+  return Promise.resolve(null);
 };
 
 export { assignToIssue };

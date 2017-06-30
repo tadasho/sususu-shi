@@ -10,7 +10,7 @@ const GITHUB_PASS = process.env.NODE_GITHUB_PASS;
 const GITHUB_TEAM = process.env.NODE_GITHUB_TEAM;
 
 // Hear @XXX review YYY#ZZZ and create review request
-const createReviewPullRequest = (event: any, callback: any) => {
+const createReviewPullRequest = (event: any): Promise<any> => {
   const re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*review\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
   if (!event.bot_id && re.test(event.text)) {
     const str: string = event.text;
@@ -38,7 +38,7 @@ const createReviewPullRequest = (event: any, callback: any) => {
     };
 
     const query: string = qs.stringify(message); // prepare the querystring
-    https.get(`https://slack.com/api/chat.postMessage?${query}`);
+    https.get(`https://slack.com/api/chat.postMessage?${query}` as any); // FIXME
 
     github.authenticate({
       password: GITHUB_PASS,
@@ -47,7 +47,7 @@ const createReviewPullRequest = (event: any, callback: any) => {
     });
     github.pullRequests.createReviewRequest(reviewer);
   }
-  callback(null);
+  return Promise.resolve(null);
 };
 
 export { createReviewPullRequest };
