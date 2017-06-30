@@ -26,7 +26,7 @@ const createReviewPullRequest = (event: any, callback: any) => {
       number: found[4],
       owner: GITHUB_TEAM,
       repo: found[3],
-      reviewers: found[1]
+      reviewers: [found[1]]
     };
     const text: string = 'Created ReviewRequest ' +
       GITHUB_TEAM + '/' + found[3] +
