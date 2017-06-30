@@ -51,11 +51,10 @@ const assignToIssue = (
       // console.log(response);
       return response.json();
     }).then((obj) => {
-      console.log(obj);
+      // console.log(obj);
       return null;
     });
-  }
-  else {
+  } else {
     return Promise.resolve(null);
   }
 };

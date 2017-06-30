@@ -9,8 +9,8 @@ describe('assignToIssue', () => {
     return assignToIssue(
       {
         githubPass: 'PASS',
-        githubUsername: 'USER',
-        githubTeam: 'TEAM'
+        githubTeam: 'TEAM',
+        githubUsername: 'USER'
       } as Config, // FIXME
       {
         bot_id: false,
