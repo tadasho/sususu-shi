@@ -1,5 +1,6 @@
 import * as GitHubApi from 'github';
 import * as https from 'https';
+import fetch from 'node-fetch';
 import * as qs from 'querystring';
 
 import { Config } from './config';
@@ -39,7 +40,7 @@ const assignToIssue = (
     };
 
     const query: string = qs.stringify(message); // prepare the querystring
-    https.get(`https://slack.com/api/chat.postMessage?${query}` as any); // FIXME
+    fetch(`https://slack.com/api/chat.postMessage?${query}`); // FIXME
 
     github.authenticate({
       password: githubPass,
