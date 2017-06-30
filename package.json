@@ -38,6 +38,7 @@
     "watch": "^1.0.2"
   },
   "dependencies": {
-    "github": "^9.2.0"
+    "github": "^9.2.0",
+    "node-fetch": "^1.7.1"
   }
 }
