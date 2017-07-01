@@ -41,17 +41,6 @@ describe('data.type = url_verification', () => {
   });
 });
 
-// test function handler
-describe('handler', () => {
-  it('nullコールバック', () => {
-    handler({
-      event: {
-        bot_id: false,
-        text: 'tada assign sususu-shi#1'
-      },
-      type: 'event_callback'
-    }, null, (error) => {
-      assert(error === null);
-    });
-  });
+describe.skip('data.type = event_callback', () => {
+  // TODO
 });

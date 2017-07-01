@@ -13,23 +13,13 @@ https://api.slack.com/tutorials/events-api-using-aws-lambda
 type Handler = (config: Config, data: any) => Promise<any>;
 
 const event: Handler = (config: Config, data: any): Promise<any> => {
-  // FIXME: wrong promise chain.
-  return Promise.resolve(null)
-    .then((value) => {
-      return value === null
-        ? slackProcess(config, data.event)
-        : value;
-    })
-    .then((value) => {
-      return value === null
-        ? assignToIssue(config, data.event)
-        : value;
-    })
-    .then((value) => {
-      return value === null
-        ? createReviewPullRequest(config, data.event)
-        : value;
-    });
+  return Promise.all([
+    slackProcess(config, data.event),
+    createReviewPullRequest(config, data.event),
+    assignToIssue(config, data.event)
+  ]).then((_) => {
+    return void 0;
+  });
 };
 
 const getHandler =
