@@ -53,4 +53,4 @@ const handler = (data: any, context: any, callback: any) => {
   }
 };
 
-export { handler, slackProcess, assignToIssue, createReviewPullRequest };
+export { handler };
