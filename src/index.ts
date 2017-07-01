@@ -1,8 +1,3 @@
-import * as fs from 'fs';
-import * as GitHubApi from 'github';
-import * as https from 'https';
-import * as qs from 'querystring';
-
 import { assignToIssue } from './assign-to-issue';
 import { Config, initConfig } from './config';
 import { createReviewPullRequest } from './create-review-pull-request';
@@ -14,10 +9,6 @@ import { slackProcess } from './slack-process';
 
 https://api.slack.com/tutorials/events-api-using-aws-lambda
 */
-
-const github = new GitHubApi();
-
-const users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
 
 // Verify Url - https://api.slack.com/events/url_verification
 const verify = (config: Config, data: any): Promise<any> => {
