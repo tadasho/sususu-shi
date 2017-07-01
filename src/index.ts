@@ -10,6 +10,26 @@ import { slackProcess } from './slack-process';
 https://api.slack.com/tutorials/events-api-using-aws-lambda
 */
 
+const event = (config: Config, data: any): Promise<any> => {
+  // FIXME: wrong promise chain.
+  return Promise.resolve(null)
+    .then((value) => {
+      return value === null
+        ? slackProcess(config, data.event)
+        : value;
+    })
+    .then((value) => {
+      return value === null
+        ? assignToIssue(config, data.event)
+        : value;
+    })
+    .then((value) => {
+      return value === null
+        ? createReviewPullRequest(config, data.event)
+        : value;
+    });
+};
+
 // Verify Url - https://api.slack.com/events/url_verification
 const verify = (config: Config, data: any): Promise<any> => {
   if (data.token === config.verificationToken) {
@@ -29,23 +49,7 @@ const handler = (data: any, context: any, callback: any) => {
         .catch((error) => callback(error));
       break;
     case 'event_callback':
-      // FIXME: wrong promise chain.
-      Promise.resolve(null)
-        .then((value) => {
-          return value === null
-            ? slackProcess(config, data.event)
-            : value;
-        })
-        .then((value) => {
-          return value === null
-            ? assignToIssue(config, data.event)
-            : value;
-        })
-        .then((value) => {
-          return value === null
-            ? createReviewPullRequest(config, data.event)
-            : value;
-        })
+      event(config, data)
         .then((value) => callback(null, value))
         .catch((error) => callback(error));
       break;
