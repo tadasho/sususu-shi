@@ -10,7 +10,9 @@ import { slackProcess } from './slack-process';
 https://api.slack.com/tutorials/events-api-using-aws-lambda
 */
 
-const event = (config: Config, data: any): Promise<any> => {
+type Handler = (config: Config, data: any) => Promise<any>;
+
+const event: Handler = (config: Config, data: any): Promise<any> => {
   // FIXME: wrong promise chain.
   return Promise.resolve(null)
     .then((value) => {
@@ -30,8 +32,20 @@ const event = (config: Config, data: any): Promise<any> => {
     });
 };
 
+const getHandler =
+  (dataType: 'event_callback' | 'url_verification'): Handler => {
+    switch (dataType) {
+      case 'url_verification':
+        return verify;
+      case 'event_callback':
+        return event;
+      default:
+        return () => Promise.resolve();
+    }
+  };
+
 // Verify Url - https://api.slack.com/events/url_verification
-const verify = (config: Config, data: any): Promise<any> => {
+const verify: Handler = (config: Config, data: any): Promise<any> => {
   if (data.token === config.verificationToken) {
     return Promise.resolve(data.challenge);
   } else {
@@ -42,19 +56,9 @@ const verify = (config: Config, data: any): Promise<any> => {
 // Lambda handler
 const handler = (data: any, context: any, callback: any) => {
   const config = initConfig();
-  switch (data.type) {
-    case 'url_verification':
-      verify(config, data)
-        .then((value) => callback(null, value))
-        .catch((error) => callback(error));
-      break;
-    case 'event_callback':
-      event(config, data)
-        .then((value) => callback(null, value))
-        .catch((error) => callback(error));
-      break;
-    default: callback(null);
-  }
+  getHandler(data.type)(config, data)
+    .then((value) => callback(null, value))
+    .catch((error) => callback(error));
 };
 
 export { handler };
