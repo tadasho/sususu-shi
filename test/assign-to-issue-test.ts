@@ -10,24 +10,21 @@ describe('assignToIssue', () => {
   let assignToIssue: typeof assignToIssueT;
   let authenticate: sinon.SinonStub;
   let addAssigneesToIssue: sinon.SinonStub;
-  let fetch: sinon.SinonStub;
   let fetchUserList: sinon.SinonStub;
-  let postMessageJson: sinon.SinonStub;
+  let postMessage: sinon.SinonStub;
 
   beforeEach(() => {
     authenticate = sinon.stub();
     addAssigneesToIssue = sinon.stub().returns(Promise.resolve());
-    postMessageJson = sinon.stub().returns(Promise.resolve());
-    fetch = sinon.stub().returns(Promise.resolve({ json: postMessageJson }));
     fetchUserList = sinon.stub()
       .returns(Promise.resolve(new Map([['tadaSlackId', 'tadaSlack']])));
+    postMessage = sinon.stub().returns(Promise.resolve());
     assignToIssue = proxyquire('../src/assign-to-issue', {
-      './slack': { fetchUserList },
+      './slack': { fetchUserList, postMessage },
       'github': function GitHubApi() {
         this.authenticate = authenticate;
         this.issues = { addAssigneesToIssue };
-      },
-      'node-fetch': { default: fetch }
+      }
     }).assignToIssue;
   });
 
@@ -50,9 +47,8 @@ describe('assignToIssue', () => {
         assert(addAssigneesToIssue.callCount === 1);
         assert(addAssigneesToIssue.getCall(0).args[0]
           .assignees === 'tadaGitHub');
-        assert(postMessageJson.callCount === 1);
-        assert(fetch.callCount === 1);
-        assert((fetch.getCall(0).args[0] as string).startsWith('https:'));
+        assert(postMessage.callCount === 1);
+        assert(postMessage.getCall(0).args[0] === 'ACCESS_TOKEN');
         assert(fetchUserList.callCount === 1);
         assert(fetchUserList.getCall(0).args[0] === 'ACCESS_TOKEN');
       });

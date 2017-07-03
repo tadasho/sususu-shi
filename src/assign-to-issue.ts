@@ -1,10 +1,10 @@
 import * as GitHubApi from 'github';
-import * as https from 'https';
-import fetch from 'node-fetch';
-import * as qs from 'querystring';
 
 import { Config } from './config';
-import { fetchUserList as fetchSlackUserList } from './slack';
+import {
+  fetchUserList as fetchSlackUserList,
+  postMessage
+} from './slack';
 
 // Hear @XXX review YYY#ZZZ and assign to issue
 const assignToIssue = (
@@ -31,14 +31,6 @@ const assignToIssue = (
     const repoName = found[3];
     const issueNumber = found[4];
 
-    const text: string =
-      'Assigned ' + userNameToAssign + ' to ' + githubTeam + '/' + repoName + ' issue#' + issueNumber;
-    const message: any = {
-      channel: event.channel,
-      text,
-      token: accessToken
-    };
-
     return fetchSlackUserList(accessToken)
       .then((slackUserList) => {
         const slackUsername = slackUserList.get(userNameToAssign);
@@ -56,13 +48,10 @@ const assignToIssue = (
         };
         return github.issues.addAssigneesToIssue(assignee);
       }).then(() => {
-        const query: string = qs.stringify(message); // prepare the querystring
-        return fetch(`https://slack.com/api/chat.postMessage?${query}`);
-      }).then((response) => {
-        // console.log(response);
-        return response.json();
-      }).then((obj) => {
-        // console.log(obj);
+        const text: string =
+          'Assigned ' + userNameToAssign + ' to ' + githubTeam + '/' + repoName + ' issue#' + issueNumber;
+        return postMessage(accessToken, event.channel, text);
+      }).then(() => {
         return null;
       });
   } else {
