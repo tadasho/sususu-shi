@@ -41,15 +41,20 @@ const assignToIssue = (
   const github = new GitHubApi();
   const re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*assign\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
   if (!event.bot_id && re.test(event.text)) {
-    const str: string = event.text;
-    const found: string[] = str.match(re);
     /*
     @userName assign yourRepositoryName#1234
     found[1] -> userName
     found[3] -> yourRepositoryName
     found[4] -> 1234
     */
-    const text: string = 'Assigned ' + found[1] + ' to ' + githubTeam + '/' + found[3] + ' issue#' + found[4];
+    const str: string = event.text;
+    const found: string[] = str.match(re);
+    const userNameToAssign = found[1];
+    const repoName = found[3];
+    const issueNumber = found[4];
+
+    const text: string =
+      'Assigned ' + userNameToAssign + ' to ' + githubTeam + '/' + repoName + ' issue#' + issueNumber;
     const message: any = {
       channel: event.channel,
       text,
@@ -58,7 +63,7 @@ const assignToIssue = (
 
     return fetchSlackUserList(accessToken)
       .then((slackUserList) => {
-        const slackUsername = slackUserList.get(found[1]);
+        const slackUsername = slackUserList.get(userNameToAssign);
         const githubUsernameToAssign = githubUsernames.get(slackUsername);
         github.authenticate({
           password: githubPass,
@@ -67,9 +72,9 @@ const assignToIssue = (
         });
         const assignee: any = {
           assignees: githubUsernameToAssign,
-          number: found[4],
+          number: issueNumber,
           owner: githubTeam,
-          repo: found[3]
+          repo: repoName
         };
         return github.issues.addAssigneesToIssue(assignee);
       }).then(() => {
