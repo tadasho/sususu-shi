@@ -1,8 +1,3 @@
-import * as fs from 'fs';
-import * as GitHubApi from 'github';
-import * as https from 'https';
-import * as qs from 'querystring';
-
 import { assignToIssue } from './assign-to-issue';
 import { Config, initConfig } from './config';
 import { createReviewPullRequest } from './create-review-pull-request';
@@ -14,14 +9,51 @@ import { slackProcess } from './slack-process';
 
 https://api.slack.com/tutorials/events-api-using-aws-lambda
 */
+type Callback = (error: any, result?: string) => void;
+type Context = any;
+type Data = EventCallbackData | UrlVerificationData;
+interface EventCallbackData {
+  event: {};
+  type: 'event_callback';
+}
+interface UrlVerificationData {
+  challenge: string;
+  token: string;
+  type: 'url_verification';
+}
+type Handler = (config: Config, data: Data) => Promise<string>;
 
-const github = new GitHubApi();
+const event: Handler = (
+  config: Config,
+  data: EventCallbackData
+): Promise<string> => {
+  return Promise.all([
+    slackProcess(config, data.event),
+    createReviewPullRequest(config, data.event),
+    assignToIssue(config, data.event)
+  ]).then((_) => {
+    return '';
+  });
+};
 
-const users: any = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+const getHandler =
+  (dataType: 'event_callback' | 'url_verification'): Handler => {
+    switch (dataType) {
+      case 'url_verification':
+        return verify;
+      case 'event_callback':
+        return event;
+      default:
+        return () => Promise.resolve('');
+    }
+  };
 
 // Verify Url - https://api.slack.com/events/url_verification
-const verify = (config: Config, data: any): Promise<any> => {
-  if (data.token === config.verificationToken) {
+const verify: Handler = (
+  { verificationToken }: Config,
+  data: UrlVerificationData
+): Promise<string> => {
+  if (data.token === verificationToken) {
     return Promise.resolve(data.challenge);
   } else {
     return Promise.reject('verification failed');
@@ -29,37 +61,11 @@ const verify = (config: Config, data: any): Promise<any> => {
 };
 
 // Lambda handler
-const handler = (data: any, context: any, callback: any) => {
+const handler = (data: Data, context: Context, callback: Callback): void => {
   const config = initConfig();
-  switch (data.type) {
-    case 'url_verification':
-      verify(config, data)
-        .then((value) => callback(null, value))
-        .catch((error) => callback(error));
-      break;
-    case 'event_callback':
-      // FIXME: wrong promise chain.
-      Promise.resolve(null)
-        .then((value) => {
-          return value === null
-            ? slackProcess(config, data.event)
-            : value;
-        })
-        .then((value) => {
-          return value === null
-            ? assignToIssue(config, data.event)
-            : value;
-        })
-        .then((value) => {
-          return value === null
-            ? createReviewPullRequest(config, data.event)
-            : value;
-        })
-        .then((value) => callback(null, value))
-        .catch((error) => callback(error));
-      break;
-    default: callback(null);
-  }
+  getHandler(data.type)(config, data)
+    .then((value) => callback(null, value))
+    .catch((error) => callback(error));
 };
 
-export { handler, slackProcess, assignToIssue, createReviewPullRequest };
+export { Data, handler };
