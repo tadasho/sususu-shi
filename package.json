@@ -31,8 +31,11 @@
   "devDependencies": {
     "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.29",
+    "@types/sinon": "^2.3.2",
     "mocha": "^3.4.2",
     "npm-run-all": "^4.0.2",
+    "proxyquire": "^1.8.0",
+    "sinon": "^2.3.6",
     "tslint": "^5.4.3",
     "typescript": "^2.3.4",
     "watch": "^1.0.2"
