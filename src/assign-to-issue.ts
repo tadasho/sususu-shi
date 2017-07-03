@@ -5,8 +5,6 @@ import * as qs from 'querystring';
 
 import { Config } from './config';
 
-const github = new GitHubApi();
-
 // Hear @XXX review YYY#ZZZ and assign to issue
 const assignToIssue = (
   {
@@ -16,6 +14,7 @@ const assignToIssue = (
     githubUsername
   }: Config,
   event: any): Promise<any> => {
+  const github = new GitHubApi();
   const re: any = /^\s*[@]?([^:,\s]+)[:,]?\s*assign\s+(?:([^\/]+)\/)?([^#]+)#(\d+)\s*$/i;
   if (!event.bot_id && re.test(event.text)) {
     const str: string = event.text;
@@ -51,11 +50,10 @@ const assignToIssue = (
       // console.log(response);
       return response.json();
     }).then((obj) => {
-      console.log(obj);
+      // console.log(obj);
       return null;
     });
-  }
-  else {
+  } else {
     return Promise.resolve(null);
   }
 };
