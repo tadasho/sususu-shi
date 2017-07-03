@@ -23,4 +23,26 @@ const fetchUserList = (token: string): Promise<Map<string, string>> => {
         new Map<string, string>()));
 };
 
-export { fetchUserList };
+const postMessage = (
+  token: string,
+  channel: string,
+  text: string
+): Promise<void> => {
+  interface SlackPostMessage {
+    ok: boolean;
+  }
+  const body = JSON.stringify({
+    channel,
+    text,
+    token
+  });
+  const headers = { 'Content-Type': 'application/json' };
+  const method = 'POST';
+  const url = 'https://slack.com/api/chat.postMessage';
+  return fetch(url, { body, headers, method })
+    .then((response) => response.json())
+    .then(({ ok }: SlackPostMessage) =>
+      ok ? Promise.resolve(void 0) : Promise.reject(new Error('ok is false')));
+};
+
+export { fetchUserList, postMessage };
